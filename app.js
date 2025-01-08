@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Sample route
 app.get('/', (req, res) => {
-  res.send('Happiness is not by chance, but by choice !');
+  res.send('Happiness is not by chance, but by choice. So value your every moments !');
 });
 
 // Server listening
