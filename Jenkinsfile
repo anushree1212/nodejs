@@ -19,7 +19,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t your-image-name .'
+                    sh 'docker build --no-cache -t my-nodejs-app.'
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run -d -p 3000:3000 your-image-name'
+                    sh 'docker run -d -p 3000:3000 my-nodejs-app'
                 }
             }
         }
