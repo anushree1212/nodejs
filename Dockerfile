@@ -1,20 +1,20 @@
-# Use official Node.js image from Docker Hub
 FROM node:14
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json
+# Copy package.json and install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application files
+# Install nodemon globally (optional)
+RUN npm install -g nodemon
+
+# Copy application code
 COPY . .
 
-# Expose the application port
+# Expose port 3000
 EXPOSE 3000
 
-# Run the application
+# Start the app with nodemon
 CMD ["npm", "start"]
