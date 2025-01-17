@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        GITHUB_CREDENTIALS = credentials('nodejs')  
-    }
     stages {
         stage('Checkout and Commit') {
             steps {
