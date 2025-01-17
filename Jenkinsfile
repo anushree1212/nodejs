@@ -19,7 +19,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build --no-cache -t my-nodejs-app .'
+                    sh 'docker build -t my-nodejs-app .'
                     sh 'docker images'  // To verify the image is built
                 }
             }
