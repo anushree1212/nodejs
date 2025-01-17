@@ -21,9 +21,7 @@ pipeline {
 
                     // Push the changes to GitHub using Jenkins credentials
                     bat '''
-                    git config --global user.name "anushree1212"
-                    git config --global user.email "anushreeph1274@gmail.com"
-                    git push https://github.com/anushree1212/nodejs.git
+                  git push
                     '''
                 }
             }
