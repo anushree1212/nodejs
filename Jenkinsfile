@@ -25,13 +25,29 @@ pipeline {
             }
         }
 
+        stage('Stop Existing Container') {
+            steps {
+                script {
+                    sh 'docker stop my-nodejs-app || true'
+                    sh 'docker rm my-nodejs-app || true'
+                }
+            }
+        }
+
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run -d -p 3000:3000 my-nodejs-app'
+                    sh 'docker run -d -p 3000:3000 --name my-nodejs-app my-nodejs-app'
                     sh 'docker ps'  // To verify the container is running
+                    sh 'docker logs my-nodejs-app'  // To check logs of the running container
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()  // Clean the workspace after the build
         }
     }
 }
