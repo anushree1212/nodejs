@@ -9,10 +9,10 @@ app.use(express.json());
 
 // Sample route
 app.get('/', (req, res) => {
-  res.send('Happiness is not by chance, but by choice. So value your every moments and cherish the memories. Be happy what you have !');
+  res.send('Happiness is not by chance, but by choice. So value your every moments and cherish the memories. Be happy what you have & who you are and work hard for desired aspirations... !');
 });
 
 // Server listening
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${3000}`);
+  console.log(`Server running at http://localhost:3000`);
 });
