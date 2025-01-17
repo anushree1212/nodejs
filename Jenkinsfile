@@ -14,7 +14,7 @@ pipeline {
                     git pull origin main
                     git add .
                     git commit -m "Commit the updated changes"
-                    git push origin main
+                    git push 
                     '''
                 }
             }
@@ -38,7 +38,7 @@ pipeline {
                     // Build the Docker image
                     bat '''
                     cd C:\\Users\\anush\\my-nodejs-app
-                    docker build -t --name node my-nodejs-app .
+                    docker build -t my-nodejs-app .
                     '''
                 }
             }
@@ -49,7 +49,7 @@ pipeline {
                 script {
                     // Run the Docker container
                     bat '''
-                    docker run -d -p 5000:5000 --name my-nodejs-app my-nodejs-app
+                    docker run -d -p 5000:5000 --name node my-nodejs-app
                     docker ps
                     '''
                 }
