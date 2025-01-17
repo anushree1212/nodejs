@@ -2,16 +2,32 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git 'https://github.com/anushree1212/nodejs.git'
+                script {
+                    // Mark the directory as safe to fix "dubious ownership" issue
+                    bat 'git config --global --add safe.directory C:/Users/anush/my-nodejs-app'
+                    
+                    // Change to the project directory and pull the latest code
+                    bat '''
+                    cd C:\\Users\\anush\\my-nodejs-app
+                    git pull origin main
+                    git add .
+                    git commit -m "Commit the updated changes"
+                    git push origin main
+                    '''
+                }
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Stop Existing Docker Container') {
             steps {
                 script {
-                    sh 'npm install'
+                    // Stop and remove the existing container if it exists
+                    bat '''
+                    docker stop my-nodejs-app || true
+                    docker rm my-nodejs-app || true
+                    '''
                 }
             }
         }
@@ -19,17 +35,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t my-nodejs-app .'
-                    sh 'docker images'  // To verify the image is built
-                }
-            }
-        }
-
-        stage('Stop Existing Container') {
-            steps {
-                script {
-                    sh 'docker stop my-nodejs-app || true'
-                    sh 'docker rm my-nodejs-app || true'
+                    // Build the Docker image
+                    bat '''
+                    cd C:\\Users\\anush\\my-nodejs-app
+                    docker build -t --name node my-nodejs-app .
+                    '''
                 }
             }
         }
@@ -37,9 +47,11 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh 'docker run -d -p 3000:3000 --name my-nodejs-app my-nodejs-app'
-                    sh 'docker ps'  // To verify the container is running
-                    sh 'docker logs my-nodejs-app'  // To check logs of the running container
+                    // Run the Docker container
+                    bat '''
+                    docker run -d -p 5000:5000 --name my-nodejs-app my-nodejs-app
+                    docker ps
+                    '''
                 }
             }
         }
@@ -47,7 +59,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()  // Clean the workspace after the build
+            cleanWs() // Clean workspace after the build
         }
     }
 }
