@@ -4,17 +4,22 @@ pipeline {
         stage('Checkout and Commit') {
             steps {
                 script {
+                    // Change to the project directory
+                    bat 'cd C:\\Users\\anush\\my-nodejs-app'
+
                     // Pull the latest changes from GitHub
-                    bat 'git pull https://github.com/anushree1212/nodejs.git main'
+                    bat 'git pull origin main'
 
                     // Add any changes to the staging area
                     bat 'git add .'
 
                     // Commit changes with a message
-                    bat 'git commit -m "Automated commit by Jenkins" || echo "No changes to commit"'
+                    bat 'git commit -m "Commit the updated changes"'
 
-                    // Push the changes to GitHub (provide repo URL if needed)
-                    bat 'git push https://github.com/anushree1212/nodejs.git main'
+                    // Push the changes to GitHub using Jenkins credentials
+                    bat '''
+                  git push
+                    '''
                 }
             }
         }
@@ -52,20 +57,16 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Stop and remove any existing container with the same name (Windows-compatible)
-                    bat '''
-                    docker ps -a -q -f name=nodejs | ForEach-Object { docker stop $_; docker rm $_ }
-                    '''
-
-                    // Run the Docker container from the built image
-                    bat 'docker run -d -p 5000:5000 --name nodejs my-nodejs-app'
+                    // Run the Docker container with the built image
+                    bat 'docker run -d -p 5000:5000 --name node my-nodejs-app'
                     
-                    // Check if the container is running
+                    // Check the running Docker container
                     bat 'docker ps'
                 }
             }
         }
     }
+
     post {
         always {
             cleanWs()  // Clean the workspace after the build
