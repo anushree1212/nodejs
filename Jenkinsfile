@@ -14,7 +14,7 @@ pipeline {
                     bat 'git commit -m "Automated commit by Jenkins" || echo "No changes to commit"'
 
                     // Push the changes to GitHub
-                    bat 'git push origin main'
+                    bat 'git push '
                 }
             }
         }
