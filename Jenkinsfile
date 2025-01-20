@@ -4,9 +4,6 @@ pipeline {
         stage('Checkout and Commit') {
             steps {
                 script {
-                    // Change to the project directory
-                    bat 'cd C:\\Users\\anush\\my-nodejs-app'
-
                     // Pull the latest changes from GitHub
                     bat 'git pull origin main'
 
@@ -55,16 +52,20 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Run the Docker container with the built image
-                    bat 'docker run -d -p 5000:5000 --name my-nodejs-app my-nodejs-app'
+                    // Stop and remove any existing container with the same name (Windows-compatible)
+                    bat '''
+                    docker ps -a -q -f name=nodejs | ForEach-Object { docker stop $_; docker rm $_ }
+                    '''
+
+                    // Run the Docker container from the built image
+                    bat 'docker run -d -p 5000:5000 --name nodejs my-nodejs-app'
                     
-                    // Check the running Docker container
+                    // Check if the container is running
                     bat 'docker ps'
                 }
             }
         }
     }
-
     post {
         always {
             cleanWs()  // Clean the workspace after the build
