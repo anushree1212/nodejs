@@ -1,20 +1,30 @@
 pipeline {
     agent any
+    environment {
+        GIT_REPO = 'https://github.com/anushree1212/nodejs.git'  // Your repo URL
+        GIT_BRANCH = 'main'  // Your branch
+    }
     stages {
-        stage('Checkout and Commit') {
+        stage('Checkout Code') {
             steps {
                 script {
-                    // Change to the project directory and pull latest changes
+                    // Pull the latest changes from the repo
                     bat 'cd C:\\Users\\anush\\my-nodejs-app && git pull origin main'
+                }
+            }
+        }
 
-                    // Add any changes to the staging area
-                    bat 'git add .'
-
-                    // Commit changes with a message, handle if no changes
-                    bat 'git commit -m "Commit the updated changes" || echo "No changes to commit"'
-
-                    // Push the changes to GitHub using Jenkins credentials
-                    bat 'git push'
+        stage('Commit and Push Changes') {
+            steps {
+                script {
+                    // Add changes to Git
+                    bat 'cd C:\\Users\\anush\\my-nodejs-app && git add .'
+                    
+                    // Commit changes to Git with a message
+                    bat '''cd C:\\Users\\anush\\my-nodejs-app && git commit -m "Automated commit by Jenkins" || echo "No changes to commit"'''
+                    
+                    // Push changes to GitHub (Make sure Jenkins has the credentials configured)
+                    bat 'cd C:\\Users\\anush\\my-nodejs-app && git push origin main'
                 }
             }
         }
@@ -23,7 +33,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image for the Node.js app
-                    bat 'docker build -t my-nodejs-app .'
+                    bat 'cd C:\\Users\\anush\\my-nodejs-app && docker build -t my-nodejs-app .'
                 }
             }
         }
@@ -33,7 +43,7 @@ pipeline {
                 script {
                     // Run the Docker container with the built image
                     bat 'docker run -d -p 5000:5000 --name nodejs my-nodejs-app'
-
+                    
                     // Check the running Docker container
                     bat 'docker ps'
                 }
@@ -43,10 +53,8 @@ pipeline {
         stage('Stop and Remove Docker Container') {
             steps {
                 script {
-                    // Stop the existing Docker container if it exists
+                    // Stop and remove any existing Docker container
                     bat 'docker stop nodejs || true'
-
-                    // Remove the existing Docker container
                     bat 'docker rm nodejs || true'
                 }
             }
