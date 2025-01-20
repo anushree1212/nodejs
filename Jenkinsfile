@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     // Pull the latest changes from GitHub
-                    bat 'git pull origin main'
+                    bat 'git pull https://github.com/anushree1212/nodejs.git main'
 
                     // Add any changes to the staging area
                     bat 'git add .'
@@ -13,8 +13,8 @@ pipeline {
                     // Commit changes with a message
                     bat 'git commit -m "Automated commit by Jenkins" || echo "No changes to commit"'
 
-                    // Push the changes to GitHub
-                    bat 'git push '
+                    // Push the changes to GitHub (provide repo URL if needed)
+                    bat 'git push https://github.com/anushree1212/nodejs.git main'
                 }
             }
         }
