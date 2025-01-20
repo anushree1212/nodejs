@@ -1,20 +1,18 @@
-# Use an official Node.js image as the base image
-FROM node:14
+# Use a smaller base image
+FROM node:14-alpine
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to leverage Docker caching
+# Copy only the necessary files for dependencies
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --production
+RUN npm install
 
-# Copy application code
+# Copy the rest of the application code
 COPY . .
 
-# Expose port 5000 for the application
 EXPOSE 5000
 
-# Start the application
 CMD ["node", "app.js"]
