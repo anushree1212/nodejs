@@ -14,12 +14,10 @@ pipeline {
                     bat 'git add .'
 
                     // Commit changes with a message
-                    bat 'git commit -m "Commit the updated changes"'
+                    bat 'git commit -m "Automated commit by Jenkins" || echo "No changes to commit"'
 
-                    // Push the changes to GitHub using Jenkins credentials
-                    bat '''
-                  git push
-                    '''
+                    // Push the changes to GitHub
+                    bat 'git push origin main'
                 }
             }
         }
@@ -58,7 +56,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container with the built image
-                    bat 'docker run -d -p 5000:5000 --name node my-nodejs-app'
+                    bat 'docker run -d -p 5000:5000 --name my-nodejs-app my-nodejs-app'
                     
                     // Check the running Docker container
                     bat 'docker ps'
