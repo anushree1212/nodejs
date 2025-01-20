@@ -58,7 +58,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container with the built image
-                    bat 'docker run -d -p 5000:5000 --name node my-nodejs-app'
+                    bat 'docker run -d -p 5000:5000 --name nodejs my-nodejs-app'
                     
                     // Check the running Docker container
                     bat 'docker ps'
